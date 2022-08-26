@@ -7,7 +7,7 @@ class Button extends StatelessWidget {
   const Button({
     Key? key,
     required this.nameButton,
-    this.onPressed,
+    required this.onPressed,
   }) : super(key: key);
 
   @override

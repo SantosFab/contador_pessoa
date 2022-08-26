@@ -1,5 +1,6 @@
 import 'package:contador_pessoa/style/custom_cores.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class CustomFont {
   static const TextStyle title = TextStyle(

@@ -1,13 +1,13 @@
 import 'package:contador_pessoa/page/counter_page.dart';
 import 'package:contador_pessoa/style/custom_cores.dart';
+import 'package:contador_pessoa/style/custom_decoration.dart';
 import 'package:contador_pessoa/style/custom_font.dart';
 import 'package:contador_pessoa/widget/button.dart';
-import 'package:contador_pessoa/widget/my_app.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
-  final TextEditingController _text = TextEditingController(text: '3');
+  final TextEditingController _text = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -15,14 +15,7 @@ class HomePage extends StatelessWidget {
       child: Scaffold(
         body: Container(
           padding: const EdgeInsets.all(16.0),
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage(
-                'assets/images/img1.jpg',
-              ),
-            ),
-          ),
+          decoration: CustomDecoration.boxHome,
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -42,30 +35,26 @@ class HomePage extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style:
                         const TextStyle(fontSize: 50, color: CustomCores.white),
-                    decoration: InputDecoration(
-                      focusColor: CustomCores.red,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(
-                          color: CustomCores.white,
-                          width: 5,
-                        ),
-                      ),
-                    ),
+                    decoration: CustomDecoration.borderHome,
                   ),
                 ),
                 Button(
                   nameButton: 'Continuar',
                   onPressed: () {
-                    int number = double.parse(_text.text).toInt();
-                    if (number.toString().isNotEmpty && number != 0) {
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => CounterPage(number: number),
-                      ));
-                    } else {
+                    String text = _text.text;
+                    if (text.isEmpty ||
+                        text.contains(' ') ||
+                        text.contains('-') ||
+                        text.contains(',') ||
+                        text.contains('.')) {
                       _alert(context);
+                    } else {
+                      int number = int.parse(text);
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => CounterPage(number: number),
+                        ),
+                      );
                     }
                   },
                 )
@@ -84,7 +73,9 @@ class HomePage extends StatelessWidget {
         return AlertDialog(
           title: const Text('Número inválido'),
           content: const Text(
-              'Por favor, digite um número interior maior que zero!'),
+            'Por favor, digite somente números inteiros, positivos e maiores que zero!!\nEx: 50, 100, 150.',
+            textAlign: TextAlign.justify,
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
