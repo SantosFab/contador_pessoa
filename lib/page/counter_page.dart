@@ -1,4 +1,5 @@
 import 'package:contador_pessoa/bloc/counter_bloc.dart';
+import 'package:contador_pessoa/bloc/counter_event.dart';
 import 'package:contador_pessoa/page/home_page.dart';
 import 'package:contador_pessoa/style/custom_cores.dart';
 import 'package:contador_pessoa/style/custom_decoration.dart';
@@ -15,8 +16,13 @@ class CounterPage extends StatefulWidget {
 }
 
 class _CounterPageState extends State<CounterPage> {
-  final CounterBloc _counter = CounterBloc();
   late int num = widget.number;
+  late CounterBloc _counter;
+  @override
+  void initState() {
+    super.initState();
+    _counter = CounterBloc(num: num);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +39,7 @@ class _CounterPageState extends State<CounterPage> {
                 style: CustomFont.title,
               ),
               StreamBuilder<int>(
-                  stream: _counter.strem,
+                  stream: _counter.stream,
                   initialData: widget.number,
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
@@ -55,7 +61,7 @@ class _CounterPageState extends State<CounterPage> {
                     onPressed: () {
                       if (num > 0) {
                         num--;
-                        _counter.addStream(num);
+                        _counter.add(DecrementEvent());
                       }
                     },
                   ),
@@ -64,7 +70,7 @@ class _CounterPageState extends State<CounterPage> {
                     onPressed: () {
                       if (num < widget.number) {
                         num++;
-                        _counter.addStream(num);
+                        _counter.add(IncrementEvent());
                       }
                     },
                   )
@@ -103,6 +109,6 @@ class _CounterPageState extends State<CounterPage> {
   @override
   void dispose() {
     super.dispose();
-    _counter.dispose();
+    _counter.close();
   }
 }
